@@ -1,0 +1,19 @@
+#!/bin/bash
+#Napisz programy klienta i serwera realizujące następujący scenariusz:
+#Klient przesyła dowolny ciąg znaków do serwera, serwer w odpowiedzi odsyła ten sam ciąg po
+#zamianie wszystkich małych liter na duże.
+
+SERVER_IP="localhost"
+PORT=12345
+
+
+echo -n "Podaj Wiadomosc: "
+read input
+
+#do serwera
+echo "$input" | nc $SERVER_IP $PORT
+
+#wyświetl odpowiedź
+odpowiedz=$(nc $SERVER_IP $PORT)
+echo "SERVER na to: $odpowiedzi"
+#luv bash hate c

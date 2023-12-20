@@ -1,0 +1,36 @@
+#!/bin/bash
+#Napisz program tworzący dwa procesy komunikujące się poprzez kolejkę komunikatów.
+#Komunikacja polega na przesłaniu komunikatów różnego typu. Proces odbierający powinien
+#odbierać tylko komunikaty typu podanego jako argument wejściowy. (wskazówka: zakładamy że
+#typ komunikatu jest liczbą z przedziału <1,10>.)
+
+
+wiadomosc=$1
+#Utwórz kolejkę komunikatów (jeśli nie istnieje) "bezpiecznik"
+if [[ ! -e kolejka ]]; then
+    mkfifo kolejka
+fi
+
+#Proces wysyłający komunikaty
+wyslij() {
+    for ((i = 1; i <= 10; i++)); do
+        echo "$1 wiadomosc $i" > kolejka
+        sleep 1
+    done
+}
+
+#Proces odbierający komunikaty
+odbierz() {
+    while true; do
+        read -r linia < kolejka
+        typwiadomosci=$(echo "$linia" | cut -d ' ' -f 1)
+        
+        if [ "$typwiadomosci" -eq "$1" ]; then
+            echo "ODEBRANO: $line"
+        fi
+    done
+}
+sender_process "$wiadomosc" &
+receiver_process "$wiadomosc" &
+wait
+#bardzo ładnie 

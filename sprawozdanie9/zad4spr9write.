@@ -1,0 +1,27 @@
+#!/bin/bash
+#Napisz program (programy) komunikujące się za pomocą kolejki komunikatów. Każdy z
+#programów wysyła wiadomości wpisywane z klawiatury, a po odbiorze komunikatu z kolejki
+#wypisuje jego treść na ekran. Operacje odczytu i zapisu powinny być wykonywane w sposób
+#asynchroniczny. Program kończy się po otrzymaniu wiadomości o treści ”exit”.
+
+
+
+QUEUE_NAME="/tmp/wiadomosc_kolejkibotak"
+EXIT_MESSAGE="exit"
+
+
+if [ ! -e "$QUEUE_NAME" ]; then
+    mkfifo "$QUEUE_NAME"
+fi
+
+
+write1() {
+    while true; do
+        read -p "Wpisz wiadomość lub exit aby wyjść:" mess
+        echo "$mess" > "$QUEUE_NAME"
+        if [ "$mess" == "$EXIT_MESSAGE" ]; then
+            break
+        fi
+    done
+}
+write1

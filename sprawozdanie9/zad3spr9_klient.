@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#Napisz programy klienta i serwera realizujące następujący scenariusz:
+#Serwer sumuje liczby wysyłane przez klienta. Liczby są przesyłane jako komunikat typu
+#M_DANE, a ostatnia z liczb jest wysyłana jako komunikat M_END. Po otrzymaniu tego
+#komunikatu serwer odsyła wynik sumowania komunikatem typu M_WYNIK
+
+
+
+# Ustawienia
+SERVER_IP="127.0.0.1"
+PORT=12345
+
+# Funkcja wysyłająca liczby na serwer
+wyslijliczby() {
+    while true; do
+        read -p "Podaj liczbę (lub wpisz 'M_END' aby zakończyć): " input
+        echo "$input"
+        if [ "$input" == "M_END" ]; then
+            break
+        fi
+    done | nc $SERVER_IP $PORT
+}
+wyslijliczby

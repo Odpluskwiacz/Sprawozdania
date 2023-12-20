@@ -1,0 +1,9 @@
+#!/bin/bash
+#Napisz programy klienta i serwera realizujące następujący scenariusz:
+#Klient przesyła dowolny ciąg znaków do serwera, serwer w odpowiedzi odsyła ten sam ciąg po
+#zamianie wszystkich małych liter na duże.
+
+
+PORT=12345
+
+nc -l -p $PORT | tr 'a-z' 'A-Z' | nc -l -p $PORT

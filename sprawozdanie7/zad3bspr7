@@ -1,0 +1,7 @@
+#!/bin/bash/
+#ps –ef| tr -s ' ' :| cut -d: -f1 |sort| uniq -c |sort n
+#cat /etc/group | head -5 > grupy.txt
+
+ps -ef| tr -s ' ' :| cut -d: -f |sort| uniq -c |sort -n
+
+cat /etc/group/ | head -5 > group.txt

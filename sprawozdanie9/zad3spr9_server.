@@ -1,0 +1,31 @@
+#!/bin/bash
+
+#Napisz programy klienta i serwera realizujące następujący scenariusz:
+#Serwer sumuje liczby wysyłane przez klienta. Liczby są przesyłane jako komunikat typu
+#M_DANE, a ostatnia z liczb jest wysyłana jako komunikat M_END. Po otrzymaniu tego
+#komunikatu serwer odsyła wynik sumowania komunikatem typu M_WYNIK
+
+
+
+
+PORT=12345
+TEMPORARY=$(mktemp)
+
+# Funkcja sumowania liczb
+sumaliczb() {
+    local suma=0
+    while read -r liczba; do
+        if [ "$liczba" == "M_END" ]; then
+            break
+        fi
+        suma=$((suma + liczba))
+    done
+    echo $suma
+}
+
+# Uruchomienie serwera
+mkfifo $TEMPORARY
+echo "Serwer uruchomiony na porcie $PORT"
+nc -l -p $PORT < $TEMPORARY | sumaliczb | nc -l -p $PORT > $TEMPORARY
+rm $TEMPORARY
+

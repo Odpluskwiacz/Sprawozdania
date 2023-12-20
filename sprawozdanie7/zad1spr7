@@ -1,0 +1,15 @@
+#!/bin/bash
+#1) Napisz program który tworzy trzy procesy – proces macierzysty i jego dwa procesy potomne.
+#Pierwszy z procesów potomnych powinien zapisać do potoku napis „HALLO!”, a drugi proces
+#potomny powinien ten napis odczytać.
+
+pajping=$(mktemp -u) # -u sprawia że generujemy tylko nazwę potoku (man mówi że unsafe)
+mkfifo $pajping # man: Create named pipes (FIFOs) with the given NAMEs
+
+
+echo "HALLO!" > $pajping &
+
+read zrury < $pajping
+echo "$zrury"
+rm $pajping
+

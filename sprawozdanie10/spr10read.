@@ -1,0 +1,22 @@
+#!/bin/bash
+
+NASZA_PAMIEC="/tmp/nasza_pamiec"
+# uwórz kiedy nie istnieje  
+if [ ! -e "$NASZA_PAMIEC" ]; then
+    
+    touch "$NASZA_PAMIEC"
+    chmod 666 "$NASZA_PAMIEC"
+fi
+NASZA_PAMIEC_id=$(ipcs -m | grep "$NASZA_PAMIEC" | awk '{print $2}') #UZYSKIWACZ IDENTYFIKATORA PAMIĘCI WSPÓŁDZIELONEJ 3000
+#funkcja
+read_nasza() {
+    while true;  do
+        otrzymano=$(cat "$NASZA_PAMIEC")
+        if [ "$otrzymano" != "haaaa" ] && [ "$otrzymano" != "hoooooo" ]; then
+            echo "otrzymano niepoprany napis: $otrzymano" >&2
+        else
+            echo "Otrzymano poprawny napis: $otrzymano"
+        fi
+    done
+}
+read_nasza

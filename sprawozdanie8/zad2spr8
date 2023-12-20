@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Funkcja do odbierania wiadomości
+odbierz() {
+    local read_fifo="$1"
+    local buffer
+
+    while true; do
+        read -r buffer < "$read_fifo"
+        echo "odbierz: $buffer"
+    done
+}
+
+# Funkcja do wysyłania wiadomości
+wyslij() {
+    local write_fifo="$1"
+    local buffer
+
+    while true; do
+        read -r -p "podaj wiadomości: " buffer
+        echo "$buffer" > "$write_fifo"
+    done
+}
+
+# Sprawdzenie argumentów
+if [ "$#" -ne 4 ] || [ "$1" != "-i" ] || [ "$3" != "-o" ]; then
+    echo "Usage: $0 -i input_fifo -o output_fifo"
+    exit 1
+fi
+
+input_fifo="$2"
+output_fifo="$4"
+
+# Utworzenie pajpów fifo
+mkfifo "$input_fifo"
+mkfifo "$output_fifo"
+
+# Uruchomienie funkcji aby działały równolegle
+odbierz "$input_fifo" &
+wyslij "$output_fifo"
+
+wait

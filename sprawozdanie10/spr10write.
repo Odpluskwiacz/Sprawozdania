@@ -1,0 +1,20 @@
+#!/bin/bash
+
+NASZA_PAMIEC="/tmp/nasza_pamiec"
+# kiedy nie istnieje krzycz
+if [ ! -e "$NASZA_PAMIEC" ]; then
+    echo "Błąd: Współdzielona pamięć nie została utworzona. Uruchom najpierw reader.sh." >&2
+    exit 1
+fi
+NASZA_PAMIEC_id=$(ipcs -m | grep "$NASZA_PAMIEC" | awk '{print $2}')
+
+#funkcja
+write_nasza() {
+    while true; do
+        echo "haaaa" > "$NASZA_PAMIEC"
+        sleep 1
+        echo "hoooooo" > "$NASZA_PAMIEC"
+        sleep 1
+    done
+}
+write_nasza
